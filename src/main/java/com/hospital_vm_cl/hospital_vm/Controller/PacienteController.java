@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import com.hospital_vm_cl.hospital_vm.model.Paciente;
 @RestController
 @RequestMapping("api/v1/Pacientes")
 public class PacienteController {
+
     @Autowired
     private PacienteService pacienteService;
     
@@ -56,6 +58,25 @@ public class PacienteController {
 
     }
 
+    @PutMapping("/{ID}")
+    public ResponseEntity<Paciente> actualizarPaciente(@PathVariable Integer id,@RequestBody Paciente paciente){
+        try{
+                Paciente actualPaciente = pacienteService.findById(id);
+                actualPaciente.setId(id);
+                actualPaciente.setRun(paciente.getRun());
+                actualPaciente.setNombres(paciente.getNombres());
+                actualPaciente.setApellidos(paciente.getApellidos());
+                actualPaciente.setCorreo(paciente.getCorreo());
+                actualPaciente.setFecha_nacimiento(paciente.getFecha_nacimiento());
 
+                pacienteService.save(actualPaciente);
+                return ResponseEntity.ok(actualPaciente);
 
+        }catch(Exception e){
+            //todo exception
+            return ResponseEntity.notFound().build();
+
+        }
+    }
+    
 }
