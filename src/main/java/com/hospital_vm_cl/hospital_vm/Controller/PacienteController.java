@@ -22,36 +22,37 @@ public class PacienteController {
 
     @Autowired
     private PacienteService pacienteService;
-    
-    
- //con este metodo ademas de listar los paciente, informamos bajo un status que el proceso se completo satisfactoriamente
+
+    // con este metodo ademas de listar los paciente, informamos bajo un status que
+    // el proceso se completo satisfactoriamente
     @GetMapping
-    public ResponseEntity<List<Paciente>> listar(){
+    public ResponseEntity<List<Paciente>> listar() {
 
         List<Paciente> pacientes = pacienteService.findAll();
 
         if (pacientes.isEmpty()) {
             return ResponseEntity.noContent().build();
-    
+
         }
         return ResponseEntity.ok(pacientes);
 
     }
 
     @PostMapping
-    public ResponseEntity<Paciente> guardar(@RequestBody Paciente paciente){
-        Paciente nuevoPaciente= pacienteService.save(paciente);
+    public ResponseEntity<Paciente> guardar(@RequestBody Paciente paciente) {
+        Paciente nuevoPaciente = pacienteService.save(paciente);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPaciente);
 
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Paciente> obtenerPorId(@PathVariable  Integer id){
-        try{
+    public ResponseEntity<Paciente> obtenerPorId(@PathVariable Integer id) {
+        try {
             Paciente paciente = pacienteService.findById(id);
             return ResponseEntity.ok(paciente);
-        }catch(Exception e){
-            //retorna Status 404
+        } catch (Exception e) {
+            // retorna Status 404
             return ResponseEntity.notFound().build();
 
         }
@@ -59,24 +60,24 @@ public class PacienteController {
     }
 
     @PutMapping("/{ID}")
-    public ResponseEntity<Paciente> actualizarPaciente(@PathVariable Integer id,@RequestBody Paciente paciente){
-        try{
-                Paciente actualPaciente = pacienteService.findById(id);
-                actualPaciente.setId(id);
-                actualPaciente.setRun(paciente.getRun());
-                actualPaciente.setNombres(paciente.getNombres());
-                actualPaciente.setApellidos(paciente.getApellidos());
-                actualPaciente.setCorreo(paciente.getCorreo());
-                actualPaciente.setFecha_nacimiento(paciente.getFecha_nacimiento());
+    public ResponseEntity<Paciente> actualizarPaciente(@PathVariable Integer id, @RequestBody Paciente paciente) {
+        try {
+            Paciente actualPaciente = pacienteService.findById(id);
+            actualPaciente.setId(id);
+            actualPaciente.setRun(paciente.getRun());
+            actualPaciente.setNombres(paciente.getNombres());
+            actualPaciente.setApellidos(paciente.getApellidos());
+            actualPaciente.setCorreo(paciente.getCorreo());
+            actualPaciente.setFecha_nacimiento(paciente.getFecha_nacimiento());
 
-                pacienteService.save(actualPaciente);
-                return ResponseEntity.ok(actualPaciente);
+            pacienteService.save(actualPaciente);
+            return ResponseEntity.ok(actualPaciente);
 
-        }catch(Exception e){
-            //todo exception
+        } catch (Exception e) {
+            // todo exception
             return ResponseEntity.notFound().build();
 
         }
     }
-    
+
 }
